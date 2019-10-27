@@ -1,0 +1,131 @@
+﻿@model IEnumerable<StudentManager.Models.Student>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h1>Students View</h1>
+
+<p>
+    <a asp-action="Create">Add New Student</a>
+</p>
+<form asp-controller="Students" asp-action="Index" method="get">
+    @{
+        bool hidden;
+        try
+        {
+            hidden = bool.Parse(Context.Request.Query["hideFilter"]);
+        }
+        catch
+        {
+            hidden = true;
+        }
+    }
+    <div id="filters" hidden=@hidden>
+        <div class="row align-items-end row justify-content-start">
+            <input type="hidden" id="hideFilter" name="hideFilter" value="@hidden.ToString()" />
+            <div class="col">
+                Name: <input type="text" name="name" class="form-control" value=@Context.Request.Query["name"]>
+            </div>
+            <div class="col">
+                Address: <input type="text" name="address" class="form-control" value=@Context.Request.Query["address"]>
+            </div>
+            <div class="col-auto">
+                Joined After: <input type="date" name="date" class="form-control" value=@Context.Request.Query["date"]>
+            </div>
+            <div class="col-auto">
+                <input type="submit" value="Filter" class="btn btn-outline-primary" />
+            </div>
+        </div>
+        <div class="row m-1">
+            <div class="col">
+                <input type="button" value="Hide Filters" class="btn btn-primary" onclick="hideFilters();" />
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col" id="showFilters" hidden=@(!hidden)>
+            <input type="button" value="Show Filters" class="btn btn-primary" onclick="showFilters();" />
+        </div>
+    </div>
+
+    @{
+        if (!string.IsNullOrEmpty(Context.Request.Query["name"]) ||
+            !string.IsNullOrEmpty(Context.Request.Query["address"]) ||
+            !string.IsNullOrEmpty(Context.Request.Query["date"]) )
+        {
+            <div class="row m-1">
+                <div class="col">   
+                    <input type="button" value="Remove Filters" class="btn btn-outline-danger"
+                           onclick="location.href='@Url.Action("Index", "Students")'" />
+                </div>
+            </div>
+        }
+    }
+            
+        </form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberSince)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentlyStudying)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberSince)
+            </td>
+            <td>
+                @{
+                    if (item.CurrentlyStudying)
+                    {
+                        WriteLiteral("Yes");
+                    }
+                    else
+                    {
+                        WriteLiteral("No");
+                    }
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.StudentID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.StudentID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.StudentID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script>
+    function hideFilters() {
+        $("#filters").attr("hidden", true);
+        $("#showFilters").attr("hidden", false);
+        $("#hideFilter").attr("value", "true");
+    }
+
+    function showFilters() {
+        $("#showFilters").attr("hidden", true);
+        $("#filters").attr("hidden", false);
+        $("#hideFilter").attr("value", "false");
+    }
+</script>

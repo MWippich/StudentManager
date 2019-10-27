@@ -1,0 +1,66 @@
+﻿@model StudentManager.Models.Student
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MemberSince)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MemberSince)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CurrentlyStudying)
+        </dt>
+        <dd class="col-sm-10">
+            @{ 
+                if (Model.CurrentlyStudying)
+                {
+                    WriteLiteral("Yes");
+                }
+                else
+                {
+                    WriteLiteral("No");
+                }
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Allergies)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                @foreach (var item in Model.Allergies)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.StudentID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

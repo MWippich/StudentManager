@@ -1,0 +1,22 @@
+﻿@model StudentManager.Models.Allergy;
+
+
+<div class="form-group" id="@ViewData["ID"]">
+    <input type="hidden" name="Allergies.Index" value="@ViewData["ID"]" />
+    <div class="row justify-content-left">
+        <div class="col">
+            <input asp-for="Description" class="form-control" name="Allergies[@ViewData["ID"]].Description" id="Description" />
+        </div>
+        <div class="col-auto">
+            <input type="button" class="btn btn-outline-danger" value="Remove" onclick="removeRow(@ViewData["ID"]);">
+        </div>
+    </div>
+</div>
+
+<script>
+    
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

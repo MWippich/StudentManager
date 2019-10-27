@@ -1,0 +1,31 @@
+﻿@model StudentManager.Models.Student
+
+<div id="AllergyRows">
+    @for (int i = 0; i < Model.Allergies.Count; i++)
+    {
+        ViewData["ID"] = i;
+        @await Html.PartialAsync("_AllergyRow", Model.Allergies[i])
+    }
+</div>
+<input type="button" value="Add Allergy" onclick="addRow();" class="btn btn-outline-success">
+
+<script>
+
+    var numAllergies = @Model.Allergies.Count;
+
+    function addRow() {
+        $.ajax({
+            url: '@Url.Action("_AddAllergyRow", "Students")/'+ numAllergies,
+            type: "GET",
+            success: function (html) {
+                $("#AllergyRows").append(html)
+            }
+        });
+        numAllergies++;
+
+    };
+
+    function removeRow(index) {
+        $('#' + index).remove();
+    }
+</script>
