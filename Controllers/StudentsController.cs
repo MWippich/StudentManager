@@ -20,7 +20,7 @@ namespace StudentManager.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index(string name, DateTime? date, string address)
+        public async Task<IActionResult> Index(string name, string address, string currentlyStudying, DateTime? joinedAfterDate)
         {
             var students = from m in _context.Students
                            select m;
@@ -33,10 +33,13 @@ namespace StudentManager.Controllers
             {
                 students = students.Where(s => s.Address.Contains(address));
             }
-
-            if (date != null)
+            if (!String.IsNullOrEmpty(currentlyStudying))
             {
-                students = students.Where(s => DateTime.Compare((DateTime)s.MemberSince, (DateTime)date) >= 0);
+                students = students.Where(s => s.CurrentlyStudying == bool.Parse(currentlyStudying));
+            }
+            if (joinedAfterDate != null)
+            {
+                students = students.Where(s => DateTime.Compare((DateTime)s.MemberSince, (DateTime)joinedAfterDate) >= 0);
             }
             return View(await students.ToListAsync());
         }
@@ -171,6 +174,7 @@ namespace StudentManager.Controllers
             }
 
             var student = await _context.Students
+                .Include(m => m.Allergies)
                 .FirstOrDefaultAsync(m => m.StudentID == id);
             if (student == null)
             {

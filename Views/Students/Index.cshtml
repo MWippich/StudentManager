@@ -30,6 +30,34 @@
             <div class="col">
                 Address: <input type="text" name="address" class="form-control" value=@Context.Request.Query["address"]>
             </div>
+            
+            <div class="col-auto">
+                Currently Studying: <select name="currentlyStudying" class="form-control" >
+                @{
+                    try
+                    {
+                        bool prev = bool.Parse(Context.Request.Query["currentlyStudying"]);
+                        <option value=""></option>
+                        if (prev)
+                        {
+                            <option value="true" selected="@prev">Yes</option>
+                            <option value="false" selected="@prev">No</option>
+                        }
+                        else
+                        {
+                            <option value="true">Yes</option>
+                            <option value="false" selected>No</option>
+                        }
+                    } catch
+                    {
+                        <option value="" selected></option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    }
+                    
+                }
+            </select>
+            </div>
             <div class="col-auto">
                 Joined After: <input type="date" name="date" class="form-control" value=@Context.Request.Query["date"]>
             </div>
